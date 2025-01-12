@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="your_name">
+        <!-- Create universities Table -->
+        <createTable tableName="universities">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Create companies Table -->
+        <createTable tableName="companies">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+
+        <!-- Create students Table -->
+        <createTable tableName="students">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="university_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_students_universities" referencedTableName="universities" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <!-- Create skills Table -->
+        <createTable tableName="skills">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="student_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_skills_students" referencedTableName="students" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <!-- Create projects Table -->
+        <createTable tableName="projects">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="student_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_projects_students" referencedTableName="students" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <!-- Create internships Table -->
+        <createTable tableName="internships">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department" type="VARCHAR(255)"/>
+            <column name="description" type="TEXT"/>
+            <column name="company_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_internships_companies" referencedTableName="companies" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <!-- Create student_internships Table -->
+        <createTable tableName="student_internships">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="student_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_student_internships_students" referencedTableName="students" referencedColumnNames="id"/>
+            </column>
+            <column name="internship_id" type="INT">
+                <constraints nullable="false" foreignKeyName="fk_student_internships_internships" referencedTableName="internships" referencedColumnNames="id"/>
+            </column>
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
