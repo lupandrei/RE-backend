@@ -18,8 +18,7 @@ import java.util.List;
 
 public class InternshipController {
 
-    @Autowired
-    private InternshipService internshipService;
+    private final InternshipService internshipService;
 
     @GetMapping("/filter")
     public ResponseEntity<List<InternshipDTO>> filterInternships(

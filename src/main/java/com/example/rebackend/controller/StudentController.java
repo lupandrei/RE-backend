@@ -17,8 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class StudentController {
 
-    @Autowired
-    private StudentAccountService studentService;
+    private final StudentAccountService studentService;
 
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
