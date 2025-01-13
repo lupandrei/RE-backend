@@ -16,11 +16,17 @@ public class Internship {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String department;
 
     private String description;
-
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyAccount company;
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
+    private String type;
 }

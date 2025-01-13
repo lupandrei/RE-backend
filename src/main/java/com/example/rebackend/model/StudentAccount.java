@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "students")
 @Getter
@@ -27,9 +29,14 @@ public class StudentAccount implements UserAccount {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "university_id")
-    private University university;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentUniversity> studentUniversities;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Project> projects;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Skill> skills;
 
     @Override
     public long getId() {

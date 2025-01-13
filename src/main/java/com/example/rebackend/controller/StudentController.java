@@ -29,4 +29,10 @@ public class StudentController {
         studentService.updateStudentProfile(studentId, updatedStudentDTO);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/student-id/{username}")
+    public ResponseEntity<Long> getStudentIdByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(studentService.getStudentIdByUsername(username));
+    }
+
 }

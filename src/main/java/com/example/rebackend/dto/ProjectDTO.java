@@ -2,16 +2,13 @@ package com.example.rebackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
-public class InternshipDTO {
+public class ProjectDTO {
     private Long id;
     private String name;
-    private String department;
     private String description;
-    private String companyName;
-    private String location;
-    private String type;
-
 }

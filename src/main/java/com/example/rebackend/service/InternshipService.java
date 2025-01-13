@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class InternshipService {
 
-    private final InternshipRepository internshipRepository;
-    private final CompanyAccountRepository companyRepository;
-    private final StudentAccountRepository studentRepository;
-    private final StudentInternshipRepository studentInternshipRepository;
+    private InternshipRepository internshipRepository;
+    private CompanyAccountRepository companyRepository;
+    private StudentAccountRepository studentRepository;
+    private StudentInternshipRepository studentInternshipRepository;
 
     public List<InternshipDTO> filterInternships(String department, String companyName, String name) {
         return internshipRepository.findAll(filterByCriteria(department, companyName, name))
@@ -32,7 +32,9 @@ public class InternshipService {
                         internship.getName(),
                         internship.getDepartment(),
                         internship.getDescription(),
-                        internship.getCompany().getName()
+                        internship.getCompany().getName(),
+                        internship.getLocation(),
+                        internship.getType()
                 ))
                 .collect(Collectors.toList());
 
@@ -84,4 +86,79 @@ public class InternshipService {
 
         studentInternshipRepository.save(studentInternship);
     }
+
+    public void saveInternshipForStudent(Long studentId, Long internshipId) {
+        StudentAccount student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new IllegalArgumentException("Internship not found"));
+
+        StudentInternship studentInternship = new StudentInternship();
+        studentInternship.setStudent(student);
+        studentInternship.setInternship(internship);
+        studentInternship.setSaved(true);
+
+        studentInternshipRepository.save(studentInternship);
+    }
+
+    public List<InternshipDTO> getAllInternships() {
+        return internshipRepository.findAll().stream()
+                .map(internship -> new InternshipDTO(
+                        internship.getId(),
+                        internship.getName(),
+                        internship.getDepartment(),
+                        internship.getDescription(),
+                        internship.getCompany().getName(),
+                        internship.getLocation(),
+                        internship.getType()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<InternshipDTO> getInternshipsByStatus(Long studentId, StudentInternshipStatus status) {
+        if (status == null) {
+            return studentInternshipRepository.findByStudentId(studentId)
+                    .stream()
+                    .map(si -> new InternshipDTO(
+                            si.getInternship().getId(),
+                            si.getInternship().getName(),
+                            si.getInternship().getDepartment(),
+                            si.getInternship().getDescription(),
+                            si.getInternship().getCompany().getName(),
+                            si.getInternship().getLocation(),
+                            si.getInternship().getType()
+                    ))
+                    .collect(Collectors.toList());
+        }
+
+        return studentInternshipRepository.findByStudentIdAndStatus(studentId, status)
+                .stream()
+                .map(si -> new InternshipDTO(
+                        si.getInternship().getId(),
+                        si.getInternship().getName(),
+                        si.getInternship().getDepartment(),
+                        si.getInternship().getDescription(),
+                        si.getInternship().getCompany().getName(),
+                        si.getInternship().getLocation(),
+                        si.getInternship().getType()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<InternshipDTO> getSavedInternships(Long studentId) {
+        return studentInternshipRepository.findByStudentIdAndSaved(studentId, true)
+                .stream()
+                .map(si -> new InternshipDTO(
+                        si.getInternship().getId(),
+                        si.getInternship().getName(),
+                        si.getInternship().getDepartment(),
+                        si.getInternship().getDescription(),
+                        si.getInternship().getCompany().getName(),
+                        si.getInternship().getLocation(),
+                        si.getInternship().getType()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }

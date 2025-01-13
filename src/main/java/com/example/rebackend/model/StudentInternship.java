@@ -24,4 +24,39 @@ public class StudentInternship {
 
     @Column(nullable = false)
     private StudentInternshipStatus status;
+
+    @Column(nullable = false)
+    private Boolean saved = false;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public StudentAccount getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentAccount student) {
+        this.student = student;
+    }
+
+    public Internship getInternship() {
+        return internship;
+    }
+
+    public void setInternship(Internship internship) {
+        this.internship = internship;
+    }
+
+    public StudentInternshipStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(StudentInternshipStatus status) {
+        this.status = status;
+    }
 }

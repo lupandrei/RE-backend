@@ -1,9 +1,11 @@
 package com.example.rebackend.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "skills")
+@Getter
 public class Skill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

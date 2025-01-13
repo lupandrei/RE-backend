@@ -2,6 +2,7 @@ package com.example.rebackend.controller;
 
 import com.example.rebackend.dto.InternshipCreateDTO;
 import com.example.rebackend.dto.InternshipDTO;
+import com.example.rebackend.model.StudentInternshipStatus;
 import com.example.rebackend.service.InternshipService;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,22 @@ public class InternshipController {
     public ResponseEntity<Void> applyToInternship(@PathVariable Long internshipId, @PathVariable Long studentId) {
         internshipService.applyToInternship(studentId, internshipId);
         return ResponseEntity.status(201).build();
+    }
+
+    @PostMapping("/{internshipId}/save/{studentId}")
+    public ResponseEntity<Void> saveInternshipForStudent(@PathVariable Long internshipId, @PathVariable Long studentId) {
+        internshipService.saveInternshipForStudent(studentId, internshipId);
+        return ResponseEntity.status(201).build();
+    }
+
+    @GetMapping("/status/{studentId}/{status}")
+    public ResponseEntity<List<InternshipDTO>> getInternshipsByStatus(@PathVariable Long studentId, @PathVariable(required = false) StudentInternshipStatus status) {
+        return ResponseEntity.ok(internshipService.getInternshipsByStatus(studentId, status));
+    }
+
+    @GetMapping("/saved/{studentId}")
+    public ResponseEntity<List<InternshipDTO>> getSavedInternships(@PathVariable Long studentId) {
+        return ResponseEntity.ok(internshipService.getSavedInternships(studentId));
     }
 }
 
