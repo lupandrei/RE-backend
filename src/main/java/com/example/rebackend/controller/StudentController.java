@@ -4,14 +4,18 @@ import com.example.rebackend.dto.StudentDTO;
 import com.example.rebackend.dto.UpdateStudentDTO;
 import com.example.rebackend.service.StudentAccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/students")
 @RequiredArgsConstructor
 public class StudentController {
 
+    @Autowired
     private StudentAccountService studentService;
 
     @GetMapping("/{id}")

@@ -23,7 +23,7 @@ public class StudentInternship {
     private Internship internship;
 
     @Column(nullable = false)
-    private StudentInternshipStatus status;
+    private String status = "";
 
     @Column(nullable = false)
     private Boolean saved = false;
@@ -52,11 +52,11 @@ public class StudentInternship {
         this.internship = internship;
     }
 
-    public StudentInternshipStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(StudentInternshipStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

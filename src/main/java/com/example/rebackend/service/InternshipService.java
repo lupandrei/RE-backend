@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class InternshipService {
 
-    private InternshipRepository internshipRepository;
-    private CompanyAccountRepository companyRepository;
-    private StudentAccountRepository studentRepository;
-    private StudentInternshipRepository studentInternshipRepository;
+    private final InternshipRepository internshipRepository;
+    private final CompanyAccountRepository companyRepository;
+    private final StudentAccountRepository studentRepository;
+    private final StudentInternshipRepository studentInternshipRepository;
 
     public List<InternshipDTO> filterInternships(String department, String companyName, String name) {
         return internshipRepository.findAll(filterByCriteria(department, companyName, name))
@@ -82,7 +82,7 @@ public class InternshipService {
         StudentInternship studentInternship = new StudentInternship();
         studentInternship.setStudent(student);
         studentInternship.setInternship(internship);
-        studentInternship.setStatus(StudentInternshipStatus.APPLIED);
+        studentInternship.setStatus("APPLIED");
 
         studentInternshipRepository.save(studentInternship);
     }
@@ -115,7 +115,7 @@ public class InternshipService {
                 .collect(Collectors.toList());
     }
 
-    public List<InternshipDTO> getInternshipsByStatus(Long studentId, StudentInternshipStatus status) {
+    public List<InternshipDTO> getInternshipsByStatus(Long studentId, String status) {
         if (status == null) {
             return studentInternshipRepository.findByStudentId(studentId)
                     .stream()

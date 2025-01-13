@@ -2,10 +2,9 @@ package com.example.rebackend.controller;
 
 import com.example.rebackend.dto.InternshipCreateDTO;
 import com.example.rebackend.dto.InternshipDTO;
-import com.example.rebackend.model.StudentInternshipStatus;
 import com.example.rebackend.service.InternshipService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +12,13 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/internships")
 @RequiredArgsConstructor
 
 public class InternshipController {
 
+    @Autowired
     private InternshipService internshipService;
 
     @GetMapping("/filter")
@@ -47,7 +48,7 @@ public class InternshipController {
     }
 
     @GetMapping("/status/{studentId}/{status}")
-    public ResponseEntity<List<InternshipDTO>> getInternshipsByStatus(@PathVariable Long studentId, @PathVariable(required = false) StudentInternshipStatus status) {
+    public ResponseEntity<List<InternshipDTO>> getInternshipsByStatus(@PathVariable Long studentId, @PathVariable(required = false) String status) {
         return ResponseEntity.ok(internshipService.getInternshipsByStatus(studentId, status));
     }
 
