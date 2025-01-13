@@ -92,48 +92,39 @@ public class StudentAccountService {
         StudentAccount existingStudent = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found"));
 
-        var studentSkills = extractSkills(studentId);
-        var studentProjects = extractProjects(studentId);
-
-        return descriptionClient.retrieveGeneratedDescription(existingStudent, convertSkillsToDTO(studentSkills), convertProjectstoDTO(studentProjects));
+        return descriptionClient.retrieveGeneratedDescription(existingStudent, convertUniversitiesDTO(existingStudent),convertSkillsToDTO(existingStudent), convertProjectstoDTO(existingStudent));
     }
 
-    private List<Skill> extractSkills(Long studentId) {
-        List<Skill> skills = skillRepository.findAll();
-        return skills.stream()
-                .filter(skill -> skill.getStudent().getId() == studentId)
-                .toList();
-
+    private List<UniversityDTO> convertUniversitiesDTO(StudentAccount existingStudent) {
+        var universities = existingStudent.getStudentUniversities();
+        return universities.stream()
+                .map(university -> {
+                    return new UniversityDTO(null, university.getUniversity().getName(), null, null);
+                })
+                .collect(Collectors.toList());
     }
 
-    private List<Project> extractProjects(Long studentId) {
-        List<Project> projects = projectRepository.findAll();
+    private List<ProjectDTO> convertProjectstoDTO(StudentAccount existingStudent) {
+        var projects = existingStudent.getProjects();
         return projects.stream()
-                .filter(project -> project.getStudent().getId() == studentId)
-                .toList();
-
-    }
-
-
-    private List<ProjectDTO> convertProjectstoDTO(List<Project> studentProjects) {
-        return studentProjects.stream()
                 .map(project -> {
                     var projectDTO = new ProjectDTO();
                     projectDTO.setName(project.getName());
                     projectDTO.setDescription(project.getDescription());
                     return projectDTO;
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 
-    private List<SkillsDTO> convertSkillsToDTO(List<Skill> studentSkills) {
-        return studentSkills.stream()
+    private List<SkillsDTO> convertSkillsToDTO(StudentAccount existingStudent) {
+        var skills = existingStudent.getSkills();
+        return skills.stream()
                 .map(skill -> {
                     var skillsDTO = new SkillsDTO();
                     skillsDTO.setName(skill.getName());
                     skillsDTO.setLevel(skill.getLevel());
                     return skillsDTO;
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 }

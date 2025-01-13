@@ -1,5 +1,6 @@
 package com.example.rebackend.model;
 
+import com.example.rebackend.model.University;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

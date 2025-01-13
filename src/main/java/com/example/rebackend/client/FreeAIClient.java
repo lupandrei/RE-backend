@@ -3,6 +3,7 @@ package com.example.rebackend.client;
 import com.example.rebackend.dto.AIMessage;
 import com.example.rebackend.dto.ProjectDTO;
 import com.example.rebackend.dto.SkillsDTO;
+import com.example.rebackend.dto.UniversityDTO;
 import com.example.rebackend.model.StudentAccount;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -29,10 +30,10 @@ public class FreeAIClient {
             Skills:%s
             """;
 
-    public String retrieveGeneratedDescription(StudentAccount studentAccount, List<SkillsDTO> skills, List<ProjectDTO> projects) throws IOException, InterruptedException {
+    public String retrieveGeneratedDescription(StudentAccount studentAccount, List<UniversityDTO> universities, List<SkillsDTO> skills, List<ProjectDTO> projects) throws IOException, InterruptedException {
         var userAIMessage = new AIMessage();
         userAIMessage.setRole("user");
-        userAIMessage.setContent(createCompletePrompt(prompt, studentAccount, skills, projects));
+        userAIMessage.setContent(createCompletePrompt(prompt, studentAccount, universities, skills, projects));
 
         var requestBody = prepareRequestBody(userAIMessage);
 
@@ -75,10 +76,10 @@ public class FreeAIClient {
         return requestBody;
     }
 
-    private String createCompletePrompt(String prompt, StudentAccount studentAccount, List<SkillsDTO> skills, List<ProjectDTO> projects) {
+    private String createCompletePrompt(String prompt, StudentAccount studentAccount, List<UniversityDTO> universities, List<SkillsDTO> skills, List<ProjectDTO> projects) {
         return String.format(prompt,
                 studentAccount.getFirstName() + ' ' + studentAccount.getLastName(),
-                studentAccount.getUniversity(),
+                universities,
                 projects,
                 skills);
     }
