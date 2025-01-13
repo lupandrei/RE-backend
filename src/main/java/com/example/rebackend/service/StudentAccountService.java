@@ -1,11 +1,24 @@
 package com.example.rebackend.service;
 
 import com.example.rebackend.dto.*;
+import com.example.rebackend.client.FreeAIClient;
+import com.example.rebackend.dto.ProjectDTO;
+import com.example.rebackend.dto.SkillsDTO;
+import com.example.rebackend.dto.StudentDTO;
+import com.example.rebackend.dto.UpdateStudentDTO;
+import com.example.rebackend.model.Project;
+import com.example.rebackend.model.Skill;
 import com.example.rebackend.model.StudentAccount;
 import com.example.rebackend.model.University;
+import com.example.rebackend.repository.ProjectRepository;
+import com.example.rebackend.repository.SkillRepository;
 import com.example.rebackend.repository.StudentAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +28,9 @@ import java.util.stream.Collectors;
 public class StudentAccountService {
 
     private final StudentAccountRepository studentRepository;
+    private final ProjectRepository projectRepository;
+    private final FreeAIClient descriptionClient;
+    private final SkillRepository skillRepository;
 
     public StudentDTO getStudentById(Long id) {
         return studentRepository.findById(id).map(student -> {
@@ -72,4 +88,52 @@ public class StudentAccountService {
         return null;
     }
 
+    public String generateStudentDescription(Long studentId) throws IOException, InterruptedException {
+        StudentAccount existingStudent = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        var studentSkills = extractSkills(studentId);
+        var studentProjects = extractProjects(studentId);
+
+        return descriptionClient.retrieveGeneratedDescription(existingStudent, convertSkillsToDTO(studentSkills), convertProjectstoDTO(studentProjects));
+    }
+
+    private List<Skill> extractSkills(Long studentId) {
+        List<Skill> skills = skillRepository.findAll();
+        return skills.stream()
+                .filter(skill -> skill.getStudent().getId() == studentId)
+                .toList();
+
+    }
+
+    private List<Project> extractProjects(Long studentId) {
+        List<Project> projects = projectRepository.findAll();
+        return projects.stream()
+                .filter(project -> project.getStudent().getId() == studentId)
+                .toList();
+
+    }
+
+
+    private List<ProjectDTO> convertProjectstoDTO(List<Project> studentProjects) {
+        return studentProjects.stream()
+                .map(project -> {
+                    var projectDTO = new ProjectDTO();
+                    projectDTO.setName(project.getName());
+                    projectDTO.setDescription(project.getDescription());
+                    return projectDTO;
+                })
+                .toList();
+    }
+
+    private List<SkillsDTO> convertSkillsToDTO(List<Skill> studentSkills) {
+        return studentSkills.stream()
+                .map(skill -> {
+                    var skillsDTO = new SkillsDTO();
+                    skillsDTO.setName(skill.getName());
+                    skillsDTO.setLevel(skill.getLevel());
+                    return skillsDTO;
+                })
+                .toList();
+    }
 }

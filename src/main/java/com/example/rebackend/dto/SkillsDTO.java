@@ -6,4 +6,9 @@ import lombok.Data;
 public class SkillsDTO {
     private String name;
     private Integer level;
+
+    @Override
+    public String toString() {
+        return  name + ", level=" + level;
+    }
 }

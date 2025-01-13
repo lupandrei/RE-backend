@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/students")
@@ -39,9 +41,9 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentIdByUsername(username));
     }
 
-    @PutMapping("/generate-description/{studentId}")
-    public ResponseEntity<Void> generateStudentDescription(@PathVariable Long studentId, @RequestBody UpdateStudentDTO updatedStudentDTO) {
-        studentService.updateStudentProfile(studentId, updatedStudentDTO);
-        return ResponseEntity.ok().build();
+    @PostMapping("/generate-description/{studentId}")
+    public ResponseEntity<String> generateStudentDescription(@PathVariable Long studentId) throws IOException, InterruptedException {
+        var response = studentService.generateStudentDescription(studentId);
+        return ResponseEntity.ok(response);
     }
 }

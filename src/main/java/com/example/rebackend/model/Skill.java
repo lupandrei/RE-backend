@@ -20,4 +20,16 @@ public class Skill {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private StudentAccount student;
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public StudentAccount getStudent() {
+        return student;
+    }
 }

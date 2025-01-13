@@ -1,31 +1,33 @@
 package com.example.rebackend.util;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.Arrays;
-import java.util.List;
-
+import com.example.rebackend.dto.AIMessage;
 import com.example.rebackend.dto.ProjectDTO;
 import com.example.rebackend.dto.SkillsDTO;
-import com.example.rebackend.model.Project;
-import com.example.rebackend.model.Skill;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
+
 public class OpenAICVSummary {
+
+    /*
+        am lasat clasa asta daca vreti sa testati ai-ul
+     */
 
     public static void main(String[] args) throws Exception {
         String apiKey = "9f6d307eef4148c2b752346605bb8037";
 
         // CV Data
         String name = "John Doe";
-        String university = "BSc in Computer Science";
+        String university = "UBB";
         var project = new ProjectDTO();
         project.setName("Online shop");
-        project.setDescription("this projects consists of a web application that allows users to buy and list online items");
+        project.setDescription("web application that allows users to buy and list online items");
         var projects = List.of(project);
         var skill1 = new SkillsDTO();
         skill1.setName("React");
@@ -38,23 +40,15 @@ public class OpenAICVSummary {
         // Prepare the prompt
         String prompt = String.format("""
                 Generate a professional CV summary based on the following details:
-                Name: %s
-                University: %s
-                Projects: %s
-                Skills: %s
-                """, name, university, String.join(", ", projects.toString()), String.join(", ", skills.toString()));
-
-        String promptString = """
-                Generate a professional CV summary based on the following details:
-                Name: John Doe
-                University: UBB
-                Projects: Online shop, description:users are allowed to buy and sell things
-                Skills: React, level=beginner, Java, level=intermediate
-                """;
+                Name:%s
+                University:%s
+                Projects:%s
+                Skills:%s
+                """, name, university, projects, skills);
 
         var userAIMessage = new AIMessage();
         userAIMessage.setRole("user");
-        userAIMessage.setContent(promptString);
+        userAIMessage.setContent(prompt);
 
         Gson gson = new Gson();
         var prompt1 = gson.toJsonTree(List.of(userAIMessage));

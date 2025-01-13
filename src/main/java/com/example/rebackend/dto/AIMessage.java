@@ -1,4 +1,4 @@
-package com.example.rebackend.util;
+package com.example.rebackend.dto;
 
 import lombok.Data;
 

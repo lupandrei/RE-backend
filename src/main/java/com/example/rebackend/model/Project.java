@@ -19,4 +19,16 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private StudentAccount student;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public StudentAccount getStudent() {
+        return student;
+    }
 }
