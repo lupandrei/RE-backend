@@ -28,9 +28,7 @@ import java.util.stream.Collectors;
 public class StudentAccountService {
 
     private final StudentAccountRepository studentRepository;
-    private final ProjectRepository projectRepository;
     private final FreeAIClient descriptionClient;
-    private final SkillRepository skillRepository;
 
     public StudentDTO getStudentById(Long id) {
         return studentRepository.findById(id).map(student -> {
