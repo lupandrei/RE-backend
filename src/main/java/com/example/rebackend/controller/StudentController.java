@@ -39,4 +39,9 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudentIdByUsername(username));
     }
 
+    @PutMapping("/generate-description/{studentId}")
+    public ResponseEntity<Void> generateStudentDescription(@PathVariable Long studentId, @RequestBody UpdateStudentDTO updatedStudentDTO) {
+        studentService.updateStudentProfile(studentId, updatedStudentDTO);
+        return ResponseEntity.ok().build();
+    }
 }
